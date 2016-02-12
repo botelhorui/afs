@@ -5,7 +5,7 @@ import java.io.File
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, FlatSpec}
 import pt.tecnico.dsi.afs.AFS
-import pt.tecnico.dsi.afs.AFS.ErrorCase
+import pt.tecnico.dsi.afs.AFS.{InvalidDirectory, ErrorCase}
 import squants.storage.{Gigabytes, Kilobytes, Storage}
 import work.martins.simon.expect.fluent.Expect
 
@@ -22,6 +22,8 @@ class AFSSpec extends FlatSpec with ScalaFutures with Matchers{
   val defaultQuota = Kilobytes(2048000)
   val volumeName: String = "group.dsi-panel-tests"
   val nonExistantDir = "dirx"
+  val timeout = 5.seconds
+  val volumeExpected = "#"+volumeName
   /*
     removes all files and directories in the path afs directory
    */
@@ -79,5 +81,20 @@ class AFSSpec extends FlatSpec with ScalaFutures with Matchers{
     assertResult(volumeName)(name2)
     assertResult(Gigabytes(1))(quota2)
     assertResult(used1)(used2)
+  }
+
+  "AFS lsquota" should "return the mount point for volume" in {
+    val e1 = AFS.listMount(new File(path))
+    e1.run().futureValue match {
+      case Right(volume) => assertResult(volumeExpected)(volume)
+      case _ => fail("Did not get expected volume name")
+    }
+  }
+  it should "Return invalid directory when given directory does not exist" in {
+    val e1 = AFS.listMount(new File(nonExistantDir))
+    e1.run().futureValue match {
+      case Left(error) => assert(error == InvalidDirectory)
+      case _ => fail("expected invalid directory but got something else")
+    }
   }
 }
