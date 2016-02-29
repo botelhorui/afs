@@ -1,8 +1,31 @@
+# Most used cmmands
+
 docker build -t kerberos-server ./kerberos-server
 docker build -t kerberos-client ./kerberos-client
-cd tests
+
+docker rm $(docker ps -aq)
+docker rmi %(docker images -aq)
+
 docker build -t tests .
 docker run -d -p 750 749 88 test
 
+DEBIAN_FRONTEND=noninteractive apt-get install -y openafs-modules-dkms
 
 
+docker run --privileged -i -t afs-server /bin/bash
+
+# 1. myserver contains all needed packages
+docker build -t myserver myserver/
+# 2 afs-server...
+docker build -t afs-server afs-server/
+
+docker run -it afs-server /bin/bash
+
+:´
+cd /var/cache
+dd if=/dev/zero of=openafs.img bs=10M count=410   # (~4.1 GB partition)
+mkfs.ext4 openafs.img
+sh -c "echo '/var/cache/openafs.img /var/cache/openafs ext4 defaults,loop 0 2' >> /etc/fstab"
+tune2fs -c 0 -i 0 -m 0 openafs.img
+sudo mount /var/cache/openafs
+´

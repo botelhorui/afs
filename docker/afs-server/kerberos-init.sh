@@ -4,7 +4,7 @@ echo -e "\n\nKerberos Initializing"
 
 REALM="EXAMPLE.COM"
 DOMAIN="example.com"
-CONTAINER_IP=kdc
+CONTAINER_IP=localhost
 ADMIN_PASSWORD="MITiys4K5"
 
 echo "REALM: $REALM"
@@ -33,6 +33,7 @@ cat > /etc/krb5.conf <<EOF
 	.$DOMAIN = $REALM
 	$DOMAIN = $REALM
 EOF
+
 echo -e "\nFinal /etc/krb5.conf:"
 cat /etc/krb5.conf
 
@@ -57,6 +58,7 @@ cat > /etc/krb5kdc/kdc.conf<<EOF
 	kdc = FILE:/tmp/kdc.log
 	admin_server = FILE:/tmp/kadmin.log
 EOF
+
 echo -e "\nFinal /etc/krb5kdc/kdc.conf:"
 cat /etc/krb5kdc/kdc.conf
 
@@ -78,13 +80,6 @@ $MASTER_PASSWORD
 $MASTER_PASSWORD
 EOF
 
-#echo -e "\nTail /tmp/kdc.log"
-#tail -f /tmp/kdc.log;TAIL_PID=$!;sleep 30;kill -2 $TAIL_PID
-
-echo -e "\nService status"
-service  krb5-kdc status
-service  krb5-admin-server status
-
 echo -e "\nAdding kadmin/admin principal"
 # Something created the kadmin/admin but because we don't know what we don't know its password.
 # So we first delete it and then create it again with a password known to us.
@@ -94,5 +89,13 @@ kadmin.local -q "addprinc -pw $ADMIN_PASSWORD kadmin/admin@$REALM"
 echo -e "\nAdding noPermissions principal"
 kadmin.local -q "addprinc -pw $ADMIN_PASSWORD noPermissions@$REALM"
 
-echo -e "\nContainer fully configured\n\n"
-tail -f /dev/null
+echo -e "\nKerberos-server Container fully configured\n\n"
+
+echo -e "\nService status"
+service  krb5-kdc status
+service  krb5-admin-server status
+
+echo $ADMIN_PASSWORD | kinit kadmin/admin
+
+klist
+
