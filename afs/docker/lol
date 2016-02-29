@@ -1,0 +1,6 @@
+#!/bin/bash
+#!/bin/bash
+
+host google.pt
+echo ""
+ping -c3 google.pt
