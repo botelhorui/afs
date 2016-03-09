@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+kadmin.local -q "addprinc -policy service -randkey -e des-cbc-crc:normal afs/example.com"
+kadmin.local -q "ktadd -e des-cbc-crc:normal -k /etc/krb5.keytab.afs afs/example.com"
+
+klist -kte /etc/krb5.keytab.afs
+
 CELLNAME=example.com
 SERVERNAME=$HOSTNAME
 
@@ -12,6 +17,9 @@ bos listhosts $SERVERNAME -noauth
 #creating database server instances
 bos create $SERVERNAME ptserver simple /usr/lib/openafs/ptserver -cell $CELLNAME -noauth
 bos create $SERVERNAME vlserver simple /usr/lib/openafs/vlserver -cell $CELLNAME -noauth
+
+# add keys to be used by AFS
+asetkey add 2 /etc/krb5.keytab.afs afs/example.com
 
 # Adding privileged users
 bos adduser $SERVERNAME admin -cell $CELLNAME -noauth

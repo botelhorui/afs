@@ -1,8 +1,0 @@
-docker build -t kerberos-server ./kerberos-server
-docker build -t kerberos-client ./kerberos-client
-cd tests
-docker build -t tests .
-docker run -d -p 750 749 88 test
-
-
-

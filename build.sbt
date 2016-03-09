@@ -27,9 +27,6 @@ libraryDependencies += "com.squants"  %% "squants"  % "0.6.1-SNAPSHOT"
 //Needed for the squants
 resolvers += Resolver.sonatypeRepo("snapshots")
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
-
-
 scalacOptions ++= Seq(
   "-deprecation",                   //Emit warning and location for usages of deprecated APIs.
   "-encoding", "UTF-8",             //Use UTF-8 encoding. Should be default.
