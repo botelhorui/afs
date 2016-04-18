@@ -2,7 +2,7 @@ organization := "pt.tecnico.dsi"
 name := "afs"
 version := "0.0.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 initialize := {
   val required = "1.8"
@@ -26,9 +26,6 @@ libraryDependencies ++= Seq(
 libraryDependencies += "com.squants"  %% "squants"  % "0.6.1-SNAPSHOT"
 //Needed for the squants
 resolvers += Resolver.sonatypeRepo("snapshots")
-
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
-
 
 scalacOptions ++= Seq(
   "-deprecation",                   //Emit warning and location for usages of deprecated APIs.
