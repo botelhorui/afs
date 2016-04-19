@@ -23,8 +23,6 @@ object AFS {
 
   case object InvalidDirectory extends ErrorCase
 
-  case object InvalidVolume extends ErrorCase
-
   case object InvalidUserOrGroupName extends ErrorCase
 
   case object CouldNotObtainAFSToken extends ErrorCase
@@ -37,14 +35,11 @@ object AFS {
 
   case object NotImplemented extends ErrorCase
 
-  case object DirectoryAlreadyMounting extends ErrorCase
-
-
   //region <FS commands>
   /**
     *
     * @param directory
-    * @return a tuple containing volume name, quota total kbytes, used quota percentage. Or error.
+    * @return
     */
   def listquota(directory: File): Expect[Either[ErrorCase, (String, Information, Information)]] = {
     val dir = directory.getPath
@@ -64,7 +59,6 @@ object AFS {
     e
   }
 
-  /*
   /**
     *
     * @param directory
@@ -103,7 +97,7 @@ object AFS {
       }
     e
   }
-  */
+
   /**
     *
     * @param directory
@@ -117,12 +111,10 @@ object AFS {
     .when(s"File '$dir' doesn't exist")
     .returning(Left(InvalidDirectory))
     .when(EndOfFile)
-      //TODO should return error when another volume is already mounted in directory file
     .returning(Right(true))
     e
   }
 
-  /*
   /**
     *
     * @param directory
@@ -399,6 +391,6 @@ object AFS {
     e
   }
   //endregion
-  */
+
 
 }
