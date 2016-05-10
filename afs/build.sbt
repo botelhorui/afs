@@ -19,11 +19,10 @@ libraryDependencies ++= Seq(
   //Testing
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   //Configuration
-  "com.typesafe" % "config" % "1.3.0"
+  "com.typesafe" % "config" % "1.3.0",
+  //Dimensions mainly storage (KB, MB, etc)
+  "com.squants"  %% "squants"  % "0.6.1-SNAPSHOT"
 )
-
-//Dimensions mainly storage (KB, MB, etc)
-libraryDependencies += "com.squants"  %% "squants"  % "0.6.1-SNAPSHOT"
 //Needed for the squants
 resolvers += Resolver.sonatypeRepo("snapshots")
 
